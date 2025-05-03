@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card } from "semantic-ui-react";
 
-function PokemonCard() {
-  const [Pokemon, SetPokemon] = useState([]);
-  const [flipimg, Setflipimg] = useState({});
-  
-  function handleimgflip(id) {
-    Setflipimg((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
+function PokemonCard({ pokemon }) {
+  const [flipimg, setFlipImg] = useState(false);
+
+  function handleImgFlip() {
+    setFlipImg((prevState) => !prevState);
   }
 
-  useEffect(() => {
-    fetch("http://localhost:3001/pokemon")
-      .then((response) => response.json())
-      .then((data) => SetPokemon(data))
-      .catch((error) => {
-        console.log(`error fetching`, error);
-      });
-  }, []);
-
-  return Pokemon.map((pokemon) => (
-    <Card key={pokemon.id}>
+  return (
+    <Card>
       <div>
-        <div className="image" onClick={() => handleimgflip(pokemon.id)}>
+        <div className="image" onClick={handleImgFlip}>
           <img
-            src={
-              flipimg[pokemon.id] ? pokemon.sprites.back : pokemon.sprites.front
-            }
+            src={flipimg ? pokemon.sprites.back : pokemon.sprites.front}
             alt={`${pokemon.name} sprite`}
           />
         </div>
@@ -43,7 +28,7 @@ function PokemonCard() {
         </div>
       </div>
     </Card>
-  ));
+  );
 }
 
 export default PokemonCard;
